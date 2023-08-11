@@ -5,3 +5,6 @@ Written in python using [spotdl](https://github.com/spotDL/spotify-downloader) a
 
 The icon.svg is downloaded from https://icons.getbootstrap.com/icons/spotify/.
 
+# Examples
+![screenshot1](screenshot1.png)
+![screenshot2](screenshot2.png)
