@@ -1,2 +1,2 @@
-spotdl==4.2.0
+spotdl==4.2.5
 pyqt6==6.5.2
