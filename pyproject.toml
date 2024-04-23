@@ -1,10 +1,13 @@
 [build-system]
-requires = ["setuptools>=69.0"]
+requires = ["setuptools>=69.0", "setuptools-git-versioning>=2.0,<3",]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools-git-versioning]
+enabled = true
 
 [project]
 name = "spotdlQt"
-version = "1.0.1"
+dynamic = ["version"]
 authors = [{ name = "Magi3r", email = "magier.mit.f3erball@gmail.com" }]
 description = "A small gui for spotdl using qt written in python"
 readme = "README.md"
