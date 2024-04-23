@@ -69,9 +69,10 @@ jobs:
         path: dist/
     - name: Sign the dists with Sigstore
       uses: sigstore/gh-action-sigstore-python@v2.1.1
-      inputs: >-
-        ./dist/*.tar.gz
-        ./dist/*.whl
+      with:
+        inputs: >-
+          ./dist/*.tar.gz
+          ./dist/*.whl
     - name: Create GitHub Release
       env:
         GITHUB_TOKEN: ${{ github.token }}
