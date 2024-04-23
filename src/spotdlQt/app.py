@@ -4,7 +4,17 @@ import os
 import sys
 import subprocess
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel, QLineEdit, QPushButton, QPlainTextEdit, QFileDialog
+from PyQt6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QVBoxLayout,
+    QWidget,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QPlainTextEdit,
+    QFileDialog,
+)
 from PyQt6.QtCore import QThread, pyqtSignal
 
 
@@ -32,7 +42,6 @@ class SpotDLWrapper(QMainWindow):
         self.download_folder_button.clicked.connect(self.choose_download_folder)
         self.layout.addWidget(self.download_folder_button)
 
-
         self.download_button = QPushButton("Download")
         self.download_button.clicked.connect(self.download_song)
         self.layout.addWidget(self.download_button)
@@ -46,17 +55,20 @@ class SpotDLWrapper(QMainWindow):
         self.setCentralWidget(self.central_widget)
 
     def download_song(self):
-        if len(self.input_field.text())==0:
-            return # dont start if no string provided
+        if len(self.input_field.text()) == 0:
+            return  # dont start if no string provided
         if self.downloader_thread and self.downloader_thread.isRunning():
             return  # Don't start a new thread if one is already running
         self.download_button.setDisabled(True)
         self.download_button.setText("Downloading...")
         user_input = self.input_field.text()
-        self.downloader_thread = SpotDLDownloader(user_input, self.download_folder)
+        self.downloader_thread = SpotDLDownloader(
+            self, user_input, self.download_folder
+        )
         self.downloader_thread.output_signal.connect(self.update_output)
         self.downloader_thread.finished.connect(
-            self.downloader_finished)  # Connect the finished signal
+            self.downloader_finished
+        )  # Connect the finished signal
         self.downloader_thread.start()
 
     def update_output(self, output):
@@ -70,7 +82,9 @@ class SpotDLWrapper(QMainWindow):
 
     def choose_download_folder(self):
         options = QFileDialog().options().ShowDirsOnly
-        new_download_folder = QFileDialog().getExistingDirectory(self, "Choose Download Folder", options=options)
+        new_download_folder = QFileDialog().getExistingDirectory(
+            self, "Choose Download Folder", options=options
+        )
         if new_download_folder:
             self.update_output(f"Download folder selected: {new_download_folder}")
             self.download_folder = new_download_folder
@@ -92,7 +106,7 @@ class SpotDLDownloader(QThread):
     output_signal = pyqtSignal(str)
     custom_message = pyqtSignal(str)
 
-    def __init__(self, user_input, download_folder):
+    def __init__(self, spotdl_app, user_input, download_folder):
         super().__init__()
         self.user_input = user_input
         self.download_folder = download_folder
@@ -105,7 +119,11 @@ class SpotDLDownloader(QThread):
             if self.download_folder:
                 os.chdir(self.download_folder)
             self.process = subprocess.Popen(
-                ['spotdl', self.user_input], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+                ["spotdl", self.user_input],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+            )
             for line in self.process.stdout:
                 self.output_signal.emit(line)
                 if self.isInterruptionRequested():
@@ -122,8 +140,12 @@ class SpotDLDownloader(QThread):
             self.process.terminate()
 
 
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
     spotdl_app = SpotDLWrapper()
     spotdl_app.show()
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()
