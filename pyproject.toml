@@ -17,7 +17,7 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
-dependencies = ["pyqt6==6.10.2", "spotdl==4.3.1"]
+dependencies = ["pyqt6==6.10.2", "spotdl==4.5.2"]
 keywords = ["spotdl", "qt6", "downloader", "music"]
 
 [project.gui-scripts]
